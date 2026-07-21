@@ -9,6 +9,7 @@ export const Footer: React.FC = () => {
   return (
     <footer
       className="app-footer"
+      role="contentinfo"
       style={{
         marginTop: '80px',
         borderTop: '1px solid rgba(255, 255, 255, 0.05)',

@@ -90,7 +90,7 @@ interface SuggestionCardProps {
   backendUrl?: string;
 }
 
-const SuggestionCard: React.FC<SuggestionCardProps> = ({ text, index, backendUrl = "" }) => {
+const SuggestionCard = ({ text, index, backendUrl = "" }: SuggestionCardProps) => {
   const [copied, setCopied] = React.useState(false);
   const [voted, setVoted] = React.useState<"up" | "down" | null>(null);
   const [isVoting, setIsVoting] = React.useState(false);
@@ -452,7 +452,7 @@ function App() {
   }, []);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    setTheme((prev: Theme) => (prev === "light" ? "dark" : "light"));
   };
 
   const scrollToTop = () => {
@@ -719,6 +719,9 @@ function App() {
 
   return (
     <>
+      <a href="#main-content" className="skip-to-content-link">
+        Skip to main content
+      </a>
       <OnboardingTour />
       <HistorySidebar
         entries={entries}
@@ -727,7 +730,7 @@ function App() {
         onDelete={handleDeleteEntry}
         onClear={handleClearAll}
         isOpen={historyOpen}
-        onToggle={() => setHistoryOpen((v) => !v)}
+        onToggle={() => setHistoryOpen((v: boolean) => !v)}
         onCompare={() => setCompareOpen(true)}
       />
 
@@ -739,17 +742,19 @@ function App() {
         />
       )}
 
-      <Navbar
-        theme={theme}
-        toggleTheme={toggleTheme}
-        user={user}
-        onLogin={() => setShowAuthModal(true)}
-        onLogout={handleLogout}
-        onHistoryClick={() => setHistoryOpen(true)}
-      />
+      <header role="banner">
+        <Navbar
+          theme={theme}
+          toggleTheme={toggleTheme}
+          user={user}
+          onLogin={() => setShowAuthModal(true)}
+          onLogout={handleLogout}
+          onHistoryClick={() => setHistoryOpen(true)}
+        />
+      </header>
       <Routes>
         <Route path="/" element={
-          <main className="landing-page">
+          <main id="main-content" className="landing-page" tabIndex={-1}>
             {showAuthModal && (
               <AuthModal
                 onSignup={signup}
@@ -758,7 +763,7 @@ function App() {
               />
             )}
 
-            <div className={score === null && !loading ? "hero-container" : ""}>
+            <section className={score === null && !loading ? "hero-container" : ""} aria-label="Resume Analyzer Workspace">
   <div className={score === null && !loading ? "hero-left" : ""}>
 
     {score === null && !loading && (
@@ -1114,7 +1119,7 @@ function App() {
               </div>
 
             
-            </div>
+            </section>
 
             {/* Loading Skeleton & Determinate Progress Bar */}
             {loading && (
@@ -1151,9 +1156,9 @@ function App() {
                   </div>
                 )}
 
-                <div id="ats-score">
+                <section id="ats-score" aria-label="ATS Score Panel">
                   <AtsScore score={score} />
-                </div>
+                </section>
 
                 <ResumePreview text={resumeText} skills={skills} />
 
@@ -1167,7 +1172,7 @@ function App() {
                 )}
 
                 {/* Skills Section */}
-                <div className="mt-4">
+                <section className="mt-4" aria-label="Detected Skills Analysis">
                   <h4>Skills Found ({skills.length})</h4>
                   {skills.length === 0 && <p>No skills detected</p>}
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", justifyContent: "center" }}>
@@ -1193,13 +1198,13 @@ function App() {
                       )}
                     </button>
                   )}
-                </div>
+                </section>
 
                 {/* Word Cloud */}
                 <SkillWordCloud skills={skills} />
 
                 {/* Skill Gap Matrix */}
-                <div className="mt-4 p-3" style={{ background: "rgba(255,255,255,0.05)", borderRadius: "8px" }}>
+                <section className="mt-4 p-3" style={{ background: "rgba(255,255,255,0.05)", borderRadius: "8px" }} aria-label="Skill Gap Matrix">
                   <h4
                     style={{
                       display: "flex",
@@ -1244,16 +1249,17 @@ function App() {
                     </div>
 
                   </div>
-                </div>
+                </section>
 
                 {/* Upgraded Suggestions Section */}
-                <div
+                <section
                   className="mt-5 p-4"
                   style={{
                     background: "rgba(30, 30, 47, 0.4)",
                     borderRadius: "var(--radius-lg)",
                     border: "1px solid rgba(255, 255, 255, 0.04)",
                   }}
+                  aria-label="AI Recommendations and Suggestions"
                 >
                   <div className="suggestion-box mt-4" style={{ padding: "15px" }}>
                     <div
@@ -1372,7 +1378,7 @@ function App() {
                       </button>
                     </div>
                   </div>
-                </div>
+                </section>
               </>
             )}
           </main>
